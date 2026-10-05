@@ -4,8 +4,8 @@ import rvt.blend
 import rasterio as rio
 import numpy as np
 
-data_path = r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana.tiff"
-output_path=r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana201.tiff"
+data_path = r".tiff"
+output_path=r".tiff"
 
 with rio.open(data_path) as src:
     print("CRS:", src.crs)
