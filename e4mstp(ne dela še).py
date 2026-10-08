@@ -39,18 +39,25 @@ dict_svf = rvt.vis.sky_view_factor(
     no_data=data_no_data,
     compute_svf=True,
     compute_opns=True
-)
+    )
 
-#dict_on = rvt.vis.sky_view_factor(
-#    dem=data_arr, 
-#    resolution=data_x_resolution,
-#    svf_n_dir=16,
-#    svf_r_max=10,
-#    svf_noise=0,
-#    no_data=data_no_data
-#)
+neg_arr = -data_arr
+if data_no_data is not None and not np.isnan(data_no_data):
+    neg_arr[data_arr == data_no_data] = data_no_data
 
-dict_ld = rvt.vis.local_dominance(
+dict_neg_opns = rvt.vis.sky_view_factor(
+    dem=neg_arr, 
+    resolution=data_x_resolution,
+    svf_n_dir=16,
+    svf_r_max=10,
+    svf_noise=0,
+    ve_factor=1,
+    no_data=data_no_data,
+    compute_opns=True,
+    compute_svf=False
+    )
+
+local_dom_arr = rvt.vis.local_dominance(
     dem=data_arr,
     min_rad=10,
     max_rad=20,
@@ -60,11 +67,6 @@ dict_ld = rvt.vis.local_dominance(
     ve_factor=1,
     no_data=data_no_data
 )
-
-svf_arr = dict_svf['svf']
-opns_arr = dict_svf['opns']
-neg_opns_arr = dict_svf['neg_opns']
-local_dom_arr = dict_svf['local_dom']
 
 
 dict_slope_aspect = rvt.vis.slope_aspect(
@@ -76,16 +78,19 @@ dict_slope_aspect = rvt.vis.slope_aspect(
     no_data=data_no_data
 )
 
+svf_arr = dict_svf['svf']
+opns_arr = dict_svf['opns']
+neg_opns_arr = dict_neg_opns['opns']
 slope_arr = dict_slope_aspect['slope']
 
 dict_arrays = {
-    'mstp': dict_mstp['mstp'],
+    'mstp_1': dict_mstp,
     'svf_1': dict_svf['svf'],     
     'svf_2': dict_svf['svf'],
-    'local_dom': dict_ld['local_dom'], #local dominance
-    'opns': dict_svf['opns'], #positive openness
-    'neg_opns': dict_svf['neg_opns'], #negative openness
-    'slope': dict_slope_aspect['slope'],          
+    'local_dom_1': local_dom_arr, #local dominance
+    'opns_1': dict_svf['opns'], #positive openness
+    'neg_opns_1': dict_neg_opns['opns'], #negative openness
+    'slope_1': dict_slope_aspect['slope'],          
     'profile': profile 
 }
 
@@ -138,21 +143,21 @@ def blend_opns_ld(dict_arrays, save_path=None):
     comb_opns_ld.create_layer(
         vis_method='Openness positive',
         normalization='Value',
-        minimum=15,
+        minimum=-15,
         maximum=15,
         blend_mode='Normal',
         opacity=50, 
-        image=(dict_arrays['opns'] - dict_arrays['neg_opns'].squeeze)
+        image=dict_arrays['opns_1'].squeeze() - dict_arrays['neg_opns_1'].squeeze()
     )
 
     comb_opns_ld.create_layer(
-        vis_method='Local Dominace',
+        vis_method='Local Dominance',
         normalization='Value',
         minimum=0.5,
         maximum=1.8,
         blend_mode='Normal',
         opacity=100, 
-        image=(dict_arrays['local_dom'].squeeze)
+        image=dict_arrays['local_dom_1'].squeeze()
     )
 
     out_opns_ld = comb_opns_ld.render_all_images(
@@ -177,7 +182,7 @@ def e4mstp(dict_arrays, save_path=None, save_float=False):
         maximum=1.0,
         blend_mode='Overlay',
         opacity=90,
-        image=dict_arrays['mstp'].squeeze()
+        image=dict_arrays['mstp_1'].squeeze()
     )
     e4mstp_combination_general.create_layer(
         vis_method='Combo SVF',
@@ -207,7 +212,7 @@ def e4mstp(dict_arrays, save_path=None, save_float=False):
         colormap='Reds_r',
         min_colormap_cut=0,
         max_colormap_cut=1,
-        image=dict_arrays['slope'].squeeze()
+        image=dict_arrays['slope_1'].squeeze()
     )
 
     out_e4mstp = e4mstp_combination_general.render_all_images(
