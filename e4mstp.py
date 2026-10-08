@@ -5,8 +5,8 @@ import rasterio
 import numpy as np
 import os 
 
-data_path = r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana.tiff"
-output_path=r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana_e4mstp_V6.tiff"
+data_path = r".tiff"
+output_path=r".tiff"
 
 with rasterio.open(data_path) as src:
     print("CRS:", src.crs)
