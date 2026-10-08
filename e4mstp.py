@@ -6,7 +6,7 @@ import numpy as np
 import os 
 
 data_path = r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana.tiff"
-output_path=r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana_e4mstp.tiff"
+output_path=r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana_e4mstp_V6.tiff"
 
 with rasterio.open(data_path) as src:
     print("CRS:", src.crs)
@@ -209,7 +209,9 @@ def e4mstp(dict_arrays, save_path=None, save_float=False):
         maximum=55,
         blend_mode='Normal',
         opacity=100,
-        colormap='Reds_r',
+        #za izbiro teh barv je uporabljena knjižnica MATPLOTLIB [https://matplotlib.org/3.3.2/tutorials/colors/colormaps.html]
+        #samo rabo te kamere je najboljša izbira zgolj te barve, ki imajo več barv v enem spektru
+        colormap='RdYlBu',
         min_colormap_cut=0,
         max_colormap_cut=1,
         image=dict_arrays['slope_1'].squeeze()
