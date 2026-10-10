@@ -1,14 +1,10 @@
 """
 e4MSTP vizualizacija iz DEM-a (RVT_py)
 
-Prilagoditve glede na originalno skripto:
-  - barvna lestvica naklona: 'cool' namesto 'Reds_r',
-  - merilo MSTP (broad_scale): (50, 200, 50); v članku in repozitoriju RVT je (50, 500, 50),
-  - celoten raster se obdela naenkrat (brez razreza na ploščice).
-
 Verzija RVT: 2.2.1 (pip show rvt-py)
 Vir priporočil za vizualizacijo: Kokalj (2025), Standardizing Visualization in
 Ancient Maya Lidar Research: Techniques, Challenges and Recommendations.
+Avtor: Jaka Dacar 2026
 """
 
 import rvt.default
