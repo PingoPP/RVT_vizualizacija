@@ -4,7 +4,7 @@ e4MSTP vizualizacija iz DEM-a (RVT_py)
 Verzija RVT: 2.2.1 (pip show rvt-py)
 Vir priporočil za vizualizacijo: Kokalj (2025), Standardizing Visualization in
 Ancient Maya Lidar Research: Techniques, Challenges and Recommendations.
-Avtor: Jaka Dacar 2026
+Avtor: @Jaka Dacar; nazadnje popravljeno 11.10.2026; 9.56
 """
 
 import rvt.default
@@ -53,7 +53,7 @@ dict_mstp = rvt.vis.mstp(
     no_data=data_no_data
 )
 
-# SVF in pozitivna odprtost, majhen radij (5 m).
+# SVF in Positivie Openness, majhen radij (5 m)
 dict_svf_1 = rvt.vis.sky_view_factor(
     dem=data_arr,
     resolution=data_x_resolution,
@@ -65,7 +65,7 @@ dict_svf_1 = rvt.vis.sky_view_factor(
     compute_opns=True
     )
 
-# SVF, velik radij (10 m); odprtost ni potrebna.
+# SVF, velik radij (10 m)
 dict_svf_2 = rvt.vis.sky_view_factor(
     dem=data_arr,
     resolution=data_x_resolution,
@@ -77,13 +77,13 @@ dict_svf_2 = rvt.vis.sky_view_factor(
     compute_opns=False
     )
 
-# Obrnjen DEM za negativno odprtost; nodata piksle ohranimo.
+# Obrnjen DEM za Negative Openness. Pri tem tudi ohranimo še no_data
 neg_arr = -data_arr
 if data_no_data is not None and not np.isnan(data_no_data):
     neg_arr[data_arr == data_no_data] = data_no_data
 
-# Negativna odprtost: pozitivna odprtost na obrnjenem DEM-u
-# (compute_svf=False, da se izračuna samo odprtost).
+# Negative Openness
+# (compute_svf=False!, da se izračuna samo Openness).
 dict_neg_opns = rvt.vis.sky_view_factor(
     dem=neg_arr, 
     resolution=data_x_resolution,
@@ -96,7 +96,7 @@ dict_neg_opns = rvt.vis.sky_view_factor(
     compute_svf=False
     )
 
-# Lokalna dominanca (radija 10 do 20 pikslov, višina opazovalca 1,7 m).
+# Local Dominance
 local_dom_arr = rvt.vis.local_dominance(
     dem=data_arr,
     min_rad=10,
@@ -108,7 +108,7 @@ local_dom_arr = rvt.vis.local_dominance(
     no_data=data_no_data
 )
 
-# Naklon v stopinjah. Pri radianih je treba prilagoditi normalizacijo v sloju naklona.
+# Slope v degree. Pri radius je treba prilagoditi normalizacijo v sloju naklona!
 dict_slope_aspect = rvt.vis.slope_aspect(
     dem=data_arr,
     resolution_x=data_x_resolution,
@@ -119,13 +119,13 @@ dict_slope_aspect = rvt.vis.slope_aspect(
 )
 
 
-# Izvlečeni nizi (v nadaljevanju se ne uporabljajo, ostajajo za pregled).
+# Zgolj za pregled
 svf_arr = dict_svf_1['svf']
 opns_arr = dict_svf_1['opns']
 neg_opns_arr = dict_neg_opns['opns']
 slope_arr = dict_slope_aspect['slope']
 
-# Zbirni slovar vhodov za mešanje.
+# Zbirni slovar vhodov za dict_arrays.
 dict_arrays = {
     'mstp_1': dict_mstp,
     'svf_1': dict_svf_1['svf'],     
@@ -138,7 +138,7 @@ dict_arrays = {
 }
 
 # --- Pomožne funkcije za shranjevanje --------------------------------------
-# Pot za float različico: doda pripono _float imenu datoteke.
+# Pot za float različico: doda pripono _float imenu datoteke
 def save_path_float(save_path):
     base, ext = os.path.splitext(str(save_path))
     return f'{base}_float{ext}'
@@ -154,8 +154,8 @@ def rasterio_save(arr, profile, save_path, nodata=None):
         else:
             dst.write(arr) 
 
-# --- Vmesni mešanici -------------------------------------------------------
-# Kombiniran SVF: svf_1 (norm. 0,7 do 1, 50 %) pod svf_2 (norm. 0,9 do 1, 100 %).
+# --- MIXING -------------------------------------------------------
+# Combined SVF: svf_1 (norm. 0,7 do 1, 50 %) pod svf_2 (norm. 0,9 do 1, 100 %)
 def blend_svf_combined(dict_arrays, save_path=None):
     comb_svf=rvt.blend.BlenderCombination()
     comb_svf.create_layer(
@@ -186,7 +186,7 @@ def blend_svf_combined(dict_arrays, save_path=None):
 
     return out_comb_svf
 
-# Kombinacija razlike odprtosti (pozitivna minus negativna) in lokalne dominance.
+# Combination Openness in Local Dominance
 def blend_opns_ld(dict_arrays, save_path=None):
     comb_opns_ld=rvt.blend.BlenderCombination()
     comb_opns_ld.create_layer(
@@ -217,7 +217,7 @@ def blend_opns_ld(dict_arrays, save_path=None):
 
     return out_opns_ld 
 
-# --- Končna mešanica e4MSTP ------------------------------------------------
+# --- MIXER FOR e⁴MSTP ------------------------------------------------
 def e4mstp(dict_arrays, save_path=None, save_float=False):
     """
     Zloži e4MSTP iz štirih slojev (od spodaj navzgor):
@@ -268,7 +268,7 @@ def e4mstp(dict_arrays, save_path=None, save_float=False):
         blend_mode='Normal',
         opacity=100,
         # Barvna lestvica 'cool' (matplotlib) preide med dvema izrazitima barvama in tako
-        # loči naklone. Odstopa od originalne e4MSTP, ki uporablja 'Reds_r'.
+        # loči naklone. Odstopa od originalne e4MSTP, ki uporablja 'Reds_r'
         # Lestvice: https://matplotlib.org/3.3.2/tutorials/colors/colormaps.html
         colormap='cool',
         min_colormap_cut=0,
@@ -282,7 +282,7 @@ def e4mstp(dict_arrays, save_path=None, save_float=False):
         no_data=np.nan
     )
 
-    # Maska nodata območij in omejitev vrednosti na največ 1.
+    # Maska nodata območij in omejitev vrednosti na največ 1
     out_e4mstp = out_e4mstp.astype('float32')
     out_e4mstp[np.isnan(dict_arrays['mstp_1'])] = np.nan
     out_e4mstp[out_e4mstp > 1] = 1
@@ -290,7 +290,7 @@ def e4mstp(dict_arrays, save_path=None, save_float=False):
     
     out_profile = dict_arrays['profile'].copy()
 
-    # Shranjevanje: najprej float različica (po želji), nato 8-bitna.
+    # Shranjevanje: najprej float različica (po želji), nato 8-bitna
     if save_float:
         rasterio_save(
             out_e4mstp,
