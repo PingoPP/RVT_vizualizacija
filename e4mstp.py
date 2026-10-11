@@ -12,13 +12,14 @@ import rvt.vis
 import rvt.blend
 import rasterio
 import numpy as np
+import pathlib as Path 
 import os
 
 # --- Vhodni in izhodni podatki ---------------------------------------------
 # Vhodni DEM
-data_path = r".tiff"
+data_path = Path(r".tiff")
 # Izhodna vizualizacija (8-bitna; float različica dobi pripono _float)
-output_path=r".tiff"
+output_path=Path(r".tiff")
 
 # --- Preverjanje vhodne datoteke -------------------------------------------
 # Izpis koordinatnega sistema in nodata vrednosti; profil se uporabi pri shranjevanju.
