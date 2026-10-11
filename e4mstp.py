@@ -12,7 +12,7 @@ import rvt.vis
 import rvt.blend
 import rasterio
 import numpy as np
-import pathlib as Path 
+from pathlib import Path 
 import os
 
 # --- Vhodni in izhodni podatki ---------------------------------------------
