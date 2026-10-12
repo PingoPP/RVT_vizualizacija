@@ -40,7 +40,7 @@ dict_slope_aspect = rvt.vis.slope_aspect(
     dem=data_arr,
     resolution_x=data_x_resolution,
     resolution_y=data_y_resolution,
-    output_units="radian",
+    output_units="degree",
     ve_factor=2,
     no_data=data_no_data
 )
