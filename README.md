@@ -12,11 +12,11 @@ V projektu bodo predstavljene naslednje kompleksnejše različice vizualizacij:
 - **VAT Poskus** – lastna različica z izbranimi parametri
 - **VAT Flat**
 - **VAT General**
+- **VAT Combined**
 - **e4MSTP**
 
 **Vizualizacije, ki še niso izdelane (bodo v bodoče narejeni):**
 - Prismatic Openness
-- VAT Combined
 
 ## Primeri vizualizacij
 
