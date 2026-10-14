@@ -2,7 +2,6 @@
 VAT COMBINED
 '''
 
-
 import rasterio as rio 
 import rvt.blend
 import rvt.vis
@@ -12,7 +11,7 @@ import numpy as np
 from pathlib import Path 
 
 input_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana.tiff")
-output_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_VATcombined.tiff")
+output_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_VATcombined_v39_is_last.tiff")
 
 with rio.open(input_data) as src:
     print("CRS", src.crs)
@@ -25,27 +24,44 @@ data_x_resolution=data_resolution[0]
 data_y_resolution=data_resolution[1]
 data_no_data=data_dict['no_data']
 
+r_large = round(10 / data_x_resolution)
+r_small = round(5 / data_x_resolution)
 
-dict_svf = rvt.vis.sky_view_factor(
+
+dict_svf_1= rvt.vis.sky_view_factor(
     dem=data_arr,
     resolution=data_x_resolution,
     svf_n_dir=16,
-    svf_r_max=10,
+    svf_r_max=r_small,
     svf_noise=0,
     no_data=data_no_data,
     compute_svf=True,
     compute_opns=True
 )
 
-svf_arr = dict_svf['svf']
-opns_arr = dict_svf['opns']
+svf_arr = dict_svf_1['svf']
+opns_arr = dict_svf_1['opns']
+
+dict_svf_2 = rvt.vis.sky_view_factor(
+    dem=data_arr,
+    resolution=data_x_resolution,   
+    svf_n_dir=16,
+    svf_r_max=r_large,
+    svf_noise=0,
+    no_data=data_no_data,
+    compute_svf=True,
+    compute_opns=True
+)
+
+svf_arr = dict_svf_2['svf']
+opns_arr = dict_svf_2['opns']
 
 dict_slope = rvt.vis.slope_aspect(
     dem=data_arr, 
     resolution_x = data_x_resolution,
     resolution_y= data_y_resolution,
-    output_units='degree',
-    ve_factor=1,
+    output_units='degree', 
+    ve_factor=2,
     no_data=data_no_data
 )
 
@@ -55,25 +71,30 @@ hillshade_arr = rvt.vis.hillshade(
     dem=data_arr,
     resolution_x=data_x_resolution,
     resolution_y=data_y_resolution,
-    sun_azimuth=315,
-    sun_elevation=35,
-    slope=None, 
+    sun_azimuth=315, 
+    sun_elevation=25, 
+    slope=None,
     aspect=None,
-    ve_factor=2.0,
+    ve_factor=6.0,
     no_data=data_no_data
 )
 
 dict_arrays = {
-    'svf_1': dict_svf['svf'],
+    'svf_1': dict_svf_1['svf'],
     'slp_1': dict_slope['slope'],   
-    'opns_1': dict_svf['opns'],
+    'opns_1': dict_svf_1['opns'],
     'hs_1': hillshade_arr,
-    'svf_2': dict_svf['svf'],
+    'svf_2': dict_svf_2['svf'],
     'slp_2': dict_slope['slope'],   
-    'opns_2': dict_svf['opns'],
+    'opns_2': dict_svf_2['opns'],
     'hs_2': hillshade_arr,
     'profile': profile
 }
+
+def cumulative_count_cut(band, min_percentile=5.0, max_percentile=98.0):
+    min_val=np.nanpercentile(band, min_percentile)
+    max_val=np.nanpercentile(band, max_percentile)
+    return min_val, max_val
 
 def save_path_float(save_path):
     base, ext = os.path.splitext(str(save_path))
@@ -87,9 +108,7 @@ def rasterio_save(arr, profile, save_path, nodata=None):
         if arr.ndim == 2:
             dst.write(arr, 1)
         else:
-            dst.write(arr)
-
-#BlendBlender
+             dst.write(arr)
 
 #vat_flat
 def vat_flat(dict_arrays, save_path=None, save_float=False):
@@ -98,16 +117,16 @@ def vat_flat(dict_arrays, save_path=None, save_float=False):
     vat_combination_flat.create_layer(
         vis_method='Sky View Factor',
         normalization='Value',
-        minimum=0.7,
-        maximum=1.0,
+        minimum=0.9, 
+        maximum=1.0, 
         blend_mode='Multiply',
-        opacity=25,
+        opacity=25, 
         image=dict_arrays['svf_2'].squeeze()
     )
     vat_combination_flat.create_layer(
         vis_method='Positive Openness',
         normalization='Value',
-        minimum=68,
+        minimum=85,
         maximum=93,
         blend_mode='Overlay',
         opacity=50,
@@ -116,16 +135,16 @@ def vat_flat(dict_arrays, save_path=None, save_float=False):
     vat_combination_flat.create_layer(
         vis_method='Slope gradient',
         normalization='Value',
-        minimum=0,
-        maximum=15,
+        minimum=0, 
+        maximum=15, 
         blend_mode='Luminosity',
-        opacity=50,
+        opacity=50, 
         image=dict_arrays['slp_2'].squeeze()
     )
     vat_combination_flat.create_layer(
         vis_method='Hillshade',
         normalization='Value',
-        minimum=0,
+        minimum=0.0, 
         maximum=1,
         blend_mode='Normal',
         opacity=100,
@@ -145,8 +164,8 @@ def vat_general(dict_arrays, save_path=None, save_float=False):
     vat_combination_general.create_layer(
         vis_method='Sky View Factor',
         normalization='Value',
-        minimum=0.7,
-        maximum=1.0,
+        minimum=0.7, 
+        maximum=1.0, 
         blend_mode='Multiply',
         opacity=25,
         image=dict_arrays['svf_1'].squeeze()
@@ -163,16 +182,16 @@ def vat_general(dict_arrays, save_path=None, save_float=False):
     vat_combination_general.create_layer(
         vis_method='Slope gradient',
         normalization='Value',
-        minimum=0,
-        maximum=50,
+        minimum=0, 
+        maximum=50, 
         blend_mode='Luminosity',
-        opacity=50,
+        opacity=50, 
         image=dict_arrays['slp_1'].squeeze()
     )
     vat_combination_general.create_layer(
         vis_method='Hillshade',
         normalization='Value',
-        minimum=0,
+        minimum=0.0,
         maximum=1,
         blend_mode='Normal',
         opacity=100,
@@ -195,8 +214,8 @@ def combined_vat(dict_arrays, save_path=None, save_float=False):
     vat_combined_combination.create_layer(
     vis_method='VAT general',
     normalization='Value',
-    minimum=0,
-    maximum=1,
+    minimum=0.0,
+    maximum=1.0,
     blend_mode='Normal',
     opacity=50,
     image=dict_arrays['vat_general'].squeeze()
@@ -204,8 +223,8 @@ def combined_vat(dict_arrays, save_path=None, save_float=False):
     vat_combined_combination.create_layer(
     vis_method='VAT flat',
     normalization='Value',
-    minimum=0,
-    maximum=1,
+    minimum=0, 
+    maximum=1.0,
     blend_mode='Normal',
     opacity=100,
     image=dict_arrays['vat_flat'].squeeze()
@@ -226,11 +245,12 @@ def combined_vat(dict_arrays, save_path=None, save_float=False):
             save_path=save_path_float(save_path),
             nodata=np.nan            
             )
-    
+
+    lo,hi = cumulative_count_cut(out_combined_vat, 5.0, 98.0)
     out_vat_combined_8bit = rvt.vis.byte_scale(
         out_combined_vat,
-        c_min=0,
-        c_max=1
+        c_min=lo,
+        c_max=hi
         )
     
     out_profile.update(dtype='uint8')
@@ -244,4 +264,4 @@ def combined_vat(dict_arrays, save_path=None, save_float=False):
     return combined_vat
 
     
-vat_combined_big = combined_vat(dict_arrays, save_path=output_path, save_float=True)
+vat_combined_big = combined_vat(dict_arrays, save_path=output_data, save_float=True)
