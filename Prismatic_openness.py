@@ -9,10 +9,9 @@ import rvt.vis
 import rvt.default
 import os 
 import numpy as np 
-from pathlib import Path 
-
-input_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana.tiff")
-output_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_Prismatic_Openness_v40.tiff")
+from pathlib import Path
+input_data = (r".tiff")
+output_data = (r".tiff")
 
 with rio.open(input_data) as src:
     print("CRS", src.crs)
