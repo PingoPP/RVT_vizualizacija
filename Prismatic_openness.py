@@ -1,7 +1,5 @@
 '''
 OPENNESS PRISMATIC
-
-PLEASE SEND ME TO HELL!
 '''
 
 
@@ -14,7 +12,7 @@ import numpy as np
 from pathlib import Path 
 
 input_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_klasificirano_in_rastirano_mediana.tiff")
-output_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_Prismatic_Openness_v31.tiff")
+output_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\Pivola_Prismatic_Openness_v40.tiff")
 
 with rio.open(input_data) as src:
     print("CRS", src.crs)
@@ -33,17 +31,19 @@ dict_mhs = rvt.vis.multi_hillshade(
     resolution_y=data_y_resolution,
     nr_directions=6,
     sun_elevation=10, 
-    ve_factor=1,
+    ve_factor=3,
+    slope=None,
+    aspect=None,
     no_data=data_no_data
 )
 
 dict_opns = rvt.vis.sky_view_factor(
     dem=data_arr,
-    resolution=data_x_resolution,
+    resolution=data_x_resolution and data_y_resolution, 
     svf_n_dir=16,
     svf_r_max=10,
     svf_noise=0,
-    ve_factor=0,
+    ve_factor=1,
     no_data=data_no_data,
     compute_asvf=False,
     compute_opns=True,
@@ -57,7 +57,7 @@ if data_no_data is not None is not np.isnan(data_no_data):
 
 dict_neg_opns = rvt.vis.sky_view_factor(
     dem=neg_arr,
-    resolution=data_x_resolution,
+    resolution=data_x_resolution and data_y_resolution,
     svf_n_dir=16,
     svf_r_max=10,
     svf_noise=0,
@@ -118,17 +118,17 @@ def op(dict_arrays, save_path=None, save_float=False):
     comb_op.create_layer(
         vis_method='Positive Openness',
         normalization='Value',
-        minimum=55,
-        maximum=92,
+        minimum=68,
+        maximum=93,
         blend_mode='Overlay',
-        opacity=90,
+        opacity=50,
         image=opns
     )
     comb_op.create_layer(
         vis_method='Negative Openness',
         normalization='Value',
-        minimum=55,
-        maximum=60,
+        minimum=68,
+        maximum=93,
         blend_mode='Overlay',
         opacity=50,
         image=neg_opns
