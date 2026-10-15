@@ -21,6 +21,7 @@ V projektu bodo predstavljene naslednje kompleksnejše različice vizualizacij:
 - Simple Red Relief
 - Modified Red Relief Image Map
 - PCA of Hillshading
+- Histogram streching
 
 ## Primeri vizualizacij
 
