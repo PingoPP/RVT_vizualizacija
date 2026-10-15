@@ -36,4 +36,12 @@ Vizualizacija VAT General na območju gradišča Britih pri Zagrajcu.
   <img width="900" alt="Vizualizacija VAT General na območju gradišča Britih pri Zagrajcu" src="https://github.com/user-attachments/assets/5d388aaf-a53e-47db-9314-f3882e9b6a4d">
 </figure>
 
+### Prismatic Openness - območje Pivole
+
+Vizualizacija s pomočjo tehnike Prismatic Openness
+
+<figure>
+  <img width="900" alt="Vizualizacija Prismatic Openness" src="https://github.com/user-attachments/assets/14b5763e-d8bc-4c28-9562-138bf76c4233" />
+</figure>
+
 
