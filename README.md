@@ -14,9 +14,13 @@ V projektu bodo predstavljene naslednje kompleksnejše različice vizualizacij:
 - **VAT General**
 - **VAT Combined**
 - **e4MSTP**
+- **Prismatic Openness**
 
 **Vizualizacije, ki še niso izdelane (bodo v bodoče narejeni):**
-- Prismatic Openness
+- RGB VAT Combined
+- Simple Red Relief
+- Modified Red Relief Image Map
+- PCA of Hillshading
 
 ## Primeri vizualizacij
 
