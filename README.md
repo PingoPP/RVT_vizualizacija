@@ -15,9 +15,10 @@ V projektu bodo predstavljene naslednje kompleksnejše različice vizualizacij:
 - **VAT Combined**
 - **e4MSTP**
 - **Prismatic Openness**
+- **RGB VAT Combined**
 
 **Vizualizacije, ki še niso izdelane (bodo v bodoče narejeni):**
-- RGB VAT Combined
+
 - Simple Red Relief
 - Modified Red Relief Image Map
 - PCA of Hillshading
@@ -49,4 +50,9 @@ Vizualizacija s pomočjo tehnike Prismatic Openness
   <img width="900" alt="Vizualizacija Prismatic Openness" src="https://github.com/user-attachments/assets/14b5763e-d8bc-4c28-9562-138bf76c4233" />
 </figure>
 
+### RGB VAT Combined - območje Pivole
+
+<figure>
+  <img width="900" alt="RGB VAT Combo" src="https://github.com/user-attachments/assets/d2f02b67-2a41-4f84-968d-0c11e2bbc983" />
+</figure>
 
