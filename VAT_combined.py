@@ -39,8 +39,8 @@ dict_svf_1= rvt.vis.sky_view_factor(
     compute_opns=True
 )
 
-svf_arr = dict_svf_1['svf']
-opns_arr = dict_svf_1['opns']
+svf_arr_1 = dict_svf_1['svf']
+opns_arr_1 = dict_svf_1['opns']
 
 dict_svf_2 = rvt.vis.sky_view_factor(
     dem=data_arr,
@@ -53,15 +53,15 @@ dict_svf_2 = rvt.vis.sky_view_factor(
     compute_opns=True
 )
 
-svf_arr = dict_svf_2['svf']
-opns_arr = dict_svf_2['opns']
+svf_arr_2 = dict_svf_2['svf']
+opns_arr_2 = dict_svf_2['opns']
 
 dict_slope = rvt.vis.slope_aspect(
     dem=data_arr, 
     resolution_x = data_x_resolution,
     resolution_y= data_y_resolution,
     output_units='degree', 
-    ve_factor=2,
+    ve_factor=1,
     no_data=data_no_data
 )
 
@@ -75,18 +75,18 @@ hillshade_arr = rvt.vis.hillshade(
     sun_elevation=25, 
     slope=None,
     aspect=None,
-    ve_factor=6.0,
+    ve_factor=2.0,
     no_data=data_no_data
 )
 
 dict_arrays = {
-    'svf_1': dict_svf_1['svf'],
+    'svf_1': svf_arr_1,
     'slp_1': dict_slope['slope'],   
-    'opns_1': dict_svf_1['opns'],
+    'opns_1': opns_arr_1,
     'hs_1': hillshade_arr,
-    'svf_2': dict_svf_2['svf'],
+    'svf_2': svf_arr_2,
     'slp_2': dict_slope['slope'],   
-    'opns_2': dict_svf_2['opns'],
+    'opns_2': opns_arr_2,
     'hs_2': hillshade_arr,
     'profile': profile
 }
