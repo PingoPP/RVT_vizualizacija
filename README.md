@@ -16,10 +16,10 @@ V projektu bodo predstavljene naslednje kompleksnejše različice vizualizacij:
 - **e4MSTP**
 - **Prismatic Openness**
 - **RGB VAT Combined**
-
+-**Simple Red Relief**
+<break></break>
 **Vizualizacije, ki še niso izdelane (bodo v bodoče narejeni):**
 
-- Simple Red Relief
 - Modified Red Relief Image Map
 - PCA of Hillshading
 - Histogram streching
@@ -56,3 +56,10 @@ Vizualizacija s pomočjo tehnike Prismatic Openness
   <img width="900" alt="RGB VAT Combo" src="https://github.com/user-attachments/assets/d2f02b67-2a41-4f84-968d-0c11e2bbc983" />
 </figure>
 
+### Simple Red Relief Mode - območje Zagrajca
+
+Vizualizacija SRRM na območju gradišča Britih pri Zagrajcu.
+
+<figure>
+  <img width="900" alt="SRRM" src="https://github.com/user-attachments/assets/d91a74a2-a4dd-46b6-9ab6-5bf03aba48a3" />
+</figure>
