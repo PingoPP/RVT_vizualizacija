@@ -17,7 +17,8 @@ V projektu bodo predstavljene naslednje kompleksnejše različice vizualizacij:
 - **Prismatic Openness**
 - **RGB VAT Combined**
 -**Simple Red Relief**
-<break></break>
+
+  
 **Vizualizacije, ki še niso izdelane (bodo v bodoče narejeni):**
 
 - Modified Red Relief Image Map
