@@ -12,8 +12,8 @@ from pathlib import Path
 import matplotlib.colors as matcolor
 
 
-input_data = Path(r"C:\Users\jakad\Downloads\radius_399_75_5.tif")
-output_data = Path(r"C:\Users\jakad\OneDrive\Desktop\3d_data\output\poskus.tiff")
+input_data = Path(r".tif")
+output_data = Path(r".tif")
 
 with rio.open(input_data) as src:
     print("CRS", src.crs)
